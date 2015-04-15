@@ -1,14 +1,19 @@
 source 'https://rubygems.org'
+
 ruby '2.1.5'
-#ruby-gemset=students_base_rails
+#ruby-gemset=students_base_4_0
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
+# Use sqlite3 as the database for Active Record
 group :development do
-  # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
 end
+gem 'faker', '1.1.2'
+gem 'will_paginate', '3.0.4'
+gem 'bootstrap-will_paginate', '0.0.9'
 gem 'bootstrap-sass', '2.3.2.0'
+#gem 'bcrypt-ruby', '~>3.0.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -17,7 +22,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
-gem 'bcrypt', '~> 3.1.7'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -29,7 +33,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
@@ -43,12 +47,23 @@ group :development, :test do
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
+
+  #Use RSpec
+  gem 'rspec-rails', '2.13.1'
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+#Some magic for RSpec
+group :test do
+  gem 'selenium-webdriver', '2.35.1'
+  gem 'capybara', '2.1.0'
+  gem 'factory_girl_rails', '4.2.1'
+end
 
+#Use postgreSQL
 group :production do
   gem 'pg', '0.15.1'
   gem 'rails_12factor', '0.0.2'
 end
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

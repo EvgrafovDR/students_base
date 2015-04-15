@@ -29,7 +29,7 @@ textarea {
 .center {
   text-align: center;
   h1 {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
   }
 }
 
@@ -73,8 +73,8 @@ p {
   font-weight: bold;
   line-height: 1;
   &:hover {
-	color: white;
-	text-decoration: none;
+    color: white;
+    text-decoration: none;
   }
 }
 
@@ -86,21 +86,21 @@ footer {
   border-top: 1px solid $grayMediumLight;
   color: $grayLight;
   a {
-	color: $gray;
-	&:hover {
-		color: $grayDarker;
-	}
+    color: $gray;
+    &:hover {
+      color: $grayDarker;
+    }
   }
   small {
-	float: left;
+    float: left;
   }
   ul {
-	float: right;
-	list-style: none;
-	li {
-		float: left;
-		margin-left: 10px;
-	}	
+    float: right;
+    list-style: none;
+    li {
+      float: left;
+      margin-left: 10px;
+    }
   }
 }
 
