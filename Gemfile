@@ -8,8 +8,8 @@ gem 'rails', '4.2.0'
 # Use sqlite3 as the database for Active Record
 group :development do
   gem 'sqlite3'
-  gem 'bootstrap-sass', '2.3.2.0'
 end
+gem 'bootstrap-sass', '2.3.2.0'
 gem 'faker', '1.1.2'
 gem 'will_paginate', '3.0.4'
 gem 'bootstrap-will_paginate', '0.0.9'
@@ -63,7 +63,6 @@ end
 group :production do
   gem 'pg', '0.15.1'
   gem 'rails_12factor', '0.0.2'
-  gem 'bootstrap-sass'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
