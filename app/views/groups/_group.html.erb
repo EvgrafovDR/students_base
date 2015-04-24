@@ -1,0 +1,14 @@
+<tr id="tr<%= group.id %>">
+  <td><%= group.id %></td>
+  <td><%= group.name %></td>
+  <td><%= group.gender %></td>
+  <td><%= group.course %></td>
+  <td><%= group.health_group %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Удалить", group, method: :delete,
+                    data: { confirm: "Вы уверены?" } %>
+    <% end %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Изменить", edit_group_path(group) %>
+    <% end %></td>
+</tr>

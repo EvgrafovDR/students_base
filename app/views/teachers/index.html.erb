@@ -1,0 +1,57 @@
+<script>
+    function toDelete(idA) {
+        var cb = document.getElementById("cb"+idA);
+        var tr = document.getElementById("tr"+idA);
+        if (cb.checked)
+        {
+            tr.style.background='#DCDCDC';
+        }
+        else tr.style.background='#FFFFFF';
+    }
+
+    function confirm_url(msg, url)
+    {
+        var answer=confirm(msg);
+        if (answer)
+            window.location=url;
+        return answer;
+    }
+
+    function Delete()
+    {
+        var checkBoxes = document.getElementsByName('check_list');
+        var route = "";
+        for(var i=0; i<checkBoxes.length; i++)
+        {
+            var cb=checkBoxes[i];
+            if (cb.checked)
+            {
+                route+="ids%5b%5d="+cb.id.slice(2)+";";
+            }
+        }
+        if(route!="") {
+            return confirm_url('Подтвердите удаление', "/teachers/destroy?" + route);
+        }
+    }
+</script>
+<div class="admhead">
+  <h1>Преподаватели</h1>
+</div>
+<%= link_to "Добавить", new_teacher_path, class: "btn btn-default btn-lg", role: "button" %>
+<table id="myTable" class="table table-hover">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Фамилия</th>
+      <th>Имя</th>
+      <th>Отчество</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+<% @teachers.each do |teacher| %>
+    <%= render partial: 'teachers/teacher', locals: {teacher: teacher} %>
+<% end %>
+
+</table>

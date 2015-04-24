@@ -1,0 +1,11 @@
+<tr id="tr<%= faculty.id %>">
+  <td><%= faculty.id %></td>
+  <td><%= faculty.name %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Удалить", faculty, method: :delete,
+                    data: { confirm: "Вы уверены?" } %>
+    <% end %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Изменить", edit_faculty_path(faculty) %>
+    <% end %></td>
+</tr>

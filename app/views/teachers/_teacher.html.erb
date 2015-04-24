@@ -1,0 +1,13 @@
+<tr id="tr<%= teacher.id %>">
+  <td><%= teacher.id %></td>
+  <td><%= teacher.family_name %></td>
+  <td><%= teacher.name %></td>
+  <td><%= teacher.second_name %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Удалить", teacher, method: :delete,
+                    data: { confirm: "Вы уверены?" } %>
+    <% end %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Изменить", edit_teacher_path(teacher) %>
+    <% end %></td>
+</tr>

@@ -33,7 +33,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update_attributes(user_params)
-      flash[:success]="Profile updated"
+      flash[:success]="Профиль изменен"
       redirect_to @user
     else
       render 'edit'
@@ -42,7 +42,7 @@ class UsersController < ApplicationController
 
   def destroy
     User.find(params[:id]).destroy
-    flash[:success] = "User deleted."
+    flash[:success] = "Профиль удален"
     redirect_to users_url
   end
 
@@ -57,7 +57,7 @@ class UsersController < ApplicationController
   def signed_in_user
    unless signed_in?
     store_location
-   redirect_to signin_url, notice: "Please sign in."
+   redirect_to signin_url, notice: "Пожалуйста авторизуйтесь"
   end
   end
 

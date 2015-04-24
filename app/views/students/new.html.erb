@@ -1,0 +1,30 @@
+<% provide(:title, 'Новый студент') %>
+<h1>Новый студент</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@student) do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+
+        <%= f.label :family_name, "Фамилия" %>
+        <%= f.text_field :family_name %>
+
+        <%= f.label :name, "Имя" %>
+        <%= f.text_field :name %>
+
+        <%= f.label :second_name, "Отчество" %>
+        <%= f.text_field :second_name %>
+
+        <%= f.label :teacher_id, "Преподаватель" %>
+        <%= f.collection_select(:teacher_id, Teacher.all, :id, :family_name) %>
+
+        <%= f.label :group_id, "Группа" %>
+        <%= f.collection_select(:group_id, Group.all, :id, :name) %>
+
+        <%= f.label :faculty_id, "Факультет" %>
+        <%= f.collection_select(:faculty_id, Faculty.all, :id, :name) %>
+
+        <%= f.submit "Сохранить", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>

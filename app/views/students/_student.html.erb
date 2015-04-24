@@ -1,0 +1,16 @@
+<tr id="tr<%= student.id %>">
+  <td><%= student.id %></td>
+  <td><%= student.family_name %></td>
+  <td><%= student.name %></td>
+  <td><%= student.second_name %></td>
+  <td><%= student.tname %></td>
+  <td><%= student.gname %></td>
+  <td><%= student.fname %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Удалить", student, method: :delete,
+                    data: { confirm: "Вы уверены?" } %>
+    <% end %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Изменить", edit_student_path(student) %>
+    <% end %></td>
+</tr>

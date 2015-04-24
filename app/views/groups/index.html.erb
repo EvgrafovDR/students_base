@@ -1,0 +1,22 @@
+<div class="admhead">
+  <h1>Группы</h1>
+</div>
+<%= link_to "Добавить", new_group_path, class: "btn btn-default btn-lg", role: "button" %>
+<table id="myTable" class="table table-hover">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Название</th>
+      <th>Пол</th>
+      <th>Курс</th>
+      <th>Группа по здоровью</th>
+      <th></th>
+      <th></th>
+    </tr>
+    </thead>
+
+    <% @groups.each do |group| %>
+        <%= render partial: 'groups/group', locals: {group: group} %>
+    <% end %>
+
+</table>

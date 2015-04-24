@@ -1,7 +1,17 @@
 Rails.application.routes.draw do
 
+  get 'teachers/new'
+
+  get 'faculties/new'
+
+  get 'groups/new'
+
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
+  resources :students
+  resources :teachers
+  resources :faculties
+  resources :groups
 
   root 'static_pages#home'
   match '/signin',  to: 'sessions#new', via: 'get'

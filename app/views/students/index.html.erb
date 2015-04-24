@@ -1,0 +1,24 @@
+<div class="admhead">
+  <h1>Студенты</h1>
+</div>
+    <%= link_to "Добавить", new_student_path, class: "btn btn-default btn-lg", role: "button" %>
+  <table id="myTable" class="table table-hover">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Фамилия</th>
+      <th>Имя</th>
+      <th>Отчество</th>
+      <th>Преподаватель</th>
+      <th>Группа</th>
+      <th>Факультет</th>
+      <th></th>
+      <th></th>
+    </tr>
+    </thead>
+
+    <% @students.each do |student| %>
+        <%= render partial: 'students/student', locals: {student: student} %>
+    <% end %>
+
+  </table>

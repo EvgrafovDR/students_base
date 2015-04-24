@@ -1,0 +1,21 @@
+<% provide(:title, 'Изменение преподавателя') %>
+<h1>Изменение преподавателя</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@teacher) do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+
+        <%= f.label :family_name, "Фамилия" %>
+        <%= f.text_field :family_name %>
+
+        <%= f.label :name, "Имя" %>
+        <%= f.text_field :name %>
+
+        <%= f.label :second_name, "Отчество" %>
+        <%= f.text_field :second_name %>
+
+        <%= f.submit "Сохранить", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>
