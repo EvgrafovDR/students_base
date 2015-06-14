@@ -7,7 +7,7 @@ class NormsController < ApplicationController
 
   def index
     @norms = Norm.joins('INNER JOIN dats ON dats.id = norms.dat_id')
-                 .select('norms.*, dats.dat as dat')
+                 .select('norms.*, dats.dat as gdat')
   end
 
   def edit
