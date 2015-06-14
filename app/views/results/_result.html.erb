@@ -1,0 +1,14 @@
+<tr id="tr<%= result.id %>">
+  <td><%= result.id %></td>
+  <td><%= result.student %></td>
+  <td><%= result.norm %></td>
+  <td><%= result.dat %></td>
+  <td><%= result.result %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Удалить", result, method: :delete,
+                    data: { confirm: "Вы уверены?" } %>
+    <% end %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Изменить", edit_result_path(result) %>
+    <% end %></td>
+</tr>

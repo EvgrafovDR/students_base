@@ -1,0 +1,13 @@
+<tr id="tr<%= fine.id %>">
+  <td><%= fine.id %></td>
+  <td><%= fine.norm %></td>
+  <td><%= fine.dat %></td>
+  <td><%= fine.fine %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Удалить", fine, method: :delete,
+                    data: { confirm: "Вы уверены?" } %>
+    <% end %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Изменить", edit_fine_path(fine) %>
+    <% end %></td>
+</tr>

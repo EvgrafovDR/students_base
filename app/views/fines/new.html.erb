@@ -1,0 +1,21 @@
+<% provide(:title, 'Добавление штрафа') %>
+<h1>Новый штраф</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@fine) do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+
+        <%= f.label :norm_id, "Норматив" %>
+        <%= f.collection_select(:norm_id, Norm.all, :id, :name) %>
+
+        <%= f.label :dat_id, "Дата" %>
+        <%= f.collection_select(:dat_id, Dat.all, :id, :dat) %>
+
+        <%= f.label :fine, "Штраф" %>
+        <%= f.text_field :fine %>
+
+        <%= f.submit "Сохранить", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>

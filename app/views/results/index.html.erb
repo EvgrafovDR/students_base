@@ -1,0 +1,24 @@
+<div class="admhead">
+  <h1>Результаты</h1>
+</div>
+<% if current_user.admin? %>
+    <%= link_to "Добавить", new_result_path, class: "btn btn-default btn-lg", role: "button" %>
+<% end %>
+<table id="myTable" class="table table-hover">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Студент</th>
+    <th>Норматив</th>
+    <th>Дата</th>
+    <th>Результат</th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <% @results.each do |result| %>
+      <%= render partial: 'results/result', locals: {result: result} %>
+  <% end %>
+
+</table>

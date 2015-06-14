@@ -1,0 +1,24 @@
+<% provide(:title, 'Изменение результата') %>
+<h1>Изменение результата</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@result) do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+
+        <%= f.label :student_id, "Студент" %>
+        <%= f.collection_select(:student_id, Student.all, :id, :family_name) %>
+
+        <%= f.label :norm_id, "Норматив" %>
+        <%= f.collection_select(:norm_id, Norm.all, :id, :name) %>
+
+        <%= f.label :dat_id, "Дата" %>
+        <%= f.collection_select(:dat_id, Dat.all, :id, :dat) %>
+
+        <%= f.label :result, "Результат" %>
+        <%= f.text_field :result %>
+
+        <%= f.submit "Сохранить", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>

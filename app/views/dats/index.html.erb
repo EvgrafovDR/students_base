@@ -1,0 +1,22 @@
+
+<div class="admhead">
+  <h1>Даты</h1>
+</div>
+<% if current_user.admin? %>
+    <%= link_to "Добавить", new_dat_path, class: "btn btn-default btn-lg", role: "button" %>
+<% end %>
+<table id="myTable" class="table table-hover">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Дата</th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <% @dats.each do |dat| %>
+      <%= render partial: 'dats/dat', locals: {dat: dat} %>
+  <% end %>
+
+</table>

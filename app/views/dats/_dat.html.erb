@@ -1,0 +1,11 @@
+<tr id="tr<%= dat.id %>">
+  <td><%= dat.id %></td>
+  <td><%= dat.dat %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Удалить", dat, method: :delete,
+                    data: { confirm: "Вы уверены?" } %>
+    <% end %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Изменить", edit_dat_path(dat) %>
+    <% end %></td>
+</tr>

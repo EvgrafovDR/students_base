@@ -1,0 +1,15 @@
+<% provide(:title, 'Новая дата') %>
+<h1>Новая дата</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@dat) do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+
+        <%= f.label :dat, "Дата" %>
+        <%= f.date_select :dat %>
+
+        <%= f.submit "Сохранить", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>

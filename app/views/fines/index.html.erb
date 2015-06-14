@@ -1,0 +1,23 @@
+<div class="admhead">
+  <h1>Штрафы</h1>
+</div>
+<% if current_user.admin? %>
+    <%= link_to "Добавить", new_fine_path, class: "btn btn-default btn-lg", role: "button" %>
+<% end %>
+<table id="myTable" class="table table-hover">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Норматив</th>
+    <th>Дата</th>
+    <th>Штраф</th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <% @fines.each do |fine| %>
+      <%= render partial: 'fines/fine', locals: {fine: fine} %>
+  <% end %>
+
+</table>
