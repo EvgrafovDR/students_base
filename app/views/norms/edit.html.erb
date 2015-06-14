@@ -1,0 +1,54 @@
+<% provide(:title, 'Изменение норматива') %>
+<h1>Изменение норматива</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@norm) do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+
+        <%= f.label :name, "Название" %>
+        <%= f.text_field :name %>
+
+        <%= f.label :main, "Главный" %>
+        <%= f.collection_select(:main, [[true, "Да"], [false, "Нет"]], :first, :last) %>
+
+        <%= f.label :dat_id, "Дата" %>
+        <%= f.collection_select(:dat_id, Dat.all, :id, :dat) %>
+
+        <%= f.label :typ, "Тип" %>
+        <%= f.text_field :typ %>
+
+        <%= f.label :v1, "На 1 балл" %>
+        <%= f.text_field :v1 %>
+
+        <%= f.label :v2, "На 2 балла" %>
+        <%= f.text_field :v2 %>
+
+        <%= f.label :v3, "На 3 балла" %>
+        <%= f.text_field :v3 %>
+
+        <%= f.label :v4, "На 4 балла" %>
+        <%= f.text_field :v4 %>
+
+        <%= f.label :v5, "На 5 баллов" %>
+        <%= f.text_field :v5 %>
+
+        <%= f.label :v6, "На 6 баллов" %>
+        <%= f.text_field :v6 %>
+
+        <%= f.label :v7, "На 7 баллов" %>
+        <%= f.text_field :v7 %>
+
+        <%= f.label :v8, "На 8 баллов" %>
+        <%= f.text_field :v8 %>
+
+        <%= f.label :v9, "На 9 баллов" %>
+        <%= f.text_field :v9 %>
+
+        <%= f.label :v10, "На 10 баллов" %>
+        <%= f.text_field :v10 %>
+
+        <%= f.submit "Сохранить", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>

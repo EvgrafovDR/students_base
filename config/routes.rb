@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   post 'requests/fields' => 'requests#sqlexec', :as => :sqlexec
 
   resources :users
+  resources :dats
+  resources :fines
+  resources :results
   resources :sessions, only: [:new, :create, :destroy]
   resources :students
   resources :norms
