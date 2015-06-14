@@ -1,4 +1,6 @@
 class GroupsController < ApplicationController
+  before_action :signed_in_user
+  before_action :admin_user,     only: [:edit, :update, :destroy, :create, :new]
   def new
     @group = Group.new
   end
@@ -12,6 +14,7 @@ class GroupsController < ApplicationController
   end
 
   def update
+    @group = Group.find(params[:id])
     if @group.update_attributes(group_params)
       flash[:success]="Группа изменена"
       redirect_to groups_path
@@ -40,5 +43,18 @@ class GroupsController < ApplicationController
 
   def group_params
     params.require(:group).permit(:name, :gender, :course, :health_group)
+  end
+
+  #before filters
+
+  def signed_in_user
+    unless signed_in?
+      store_location
+      redirect_to signin_url, notice: "Пожалуйста авторизуйтесь"
+    end
+  end
+
+  def admin_user
+    redirect_to(root_url, notice: "Недостаточно прав") unless current_user.admin?
   end
 end

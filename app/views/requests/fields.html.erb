@@ -1,0 +1,686 @@
+<style>
+
+    .hiddentag{
+        display: none;
+    }
+    .selector{
+        font-size:1.5em;
+    }
+    .nav-header1 {
+        display: block;
+        padding: 0 15px;
+        font-size: 11px;
+        font-weight: bold;
+        color: #999;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+    }
+
+    .btntop
+    {
+        margin:0px 0px 10px 0px;
+    }
+
+    .main{
+        margin:0 0 0px 0;
+        height:300px;
+    }
+    .vertical{
+        display: inline-block;
+        position: relative;
+        top: 40px;
+        width: 100px;
+    }
+    .btnfixed{
+        width: 100px;
+        float: inherit;
+        margin-top: 10px;
+    }
+    .hordiv {
+        display: inline-block;
+        width: 300px;
+    }
+    .outer { font:normal 14px/18px 'latomedium', arial, sans-serif;
+        position:relative;
+        padding:50px 0 30px 0;
+        background:#FFF;
+        margin:0 0 50px 0;
+    }
+    .innera {
+        overflow:auto;
+        height:200px;
+        background:#FFF;
+    }
+    .outer table caption {
+        position:absolute;
+        text-align:center;
+        top:0;
+        height:20px;
+    }
+    .outer thead tr {
+        position:absolute;
+        top:20px;
+        height:20px;
+        left:0;
+    }
+    .outer tfoot td {
+        position:absolute;
+        text-align:center;
+        background:#FFF;
+        color:#000;
+        bottom:0;
+        left:0
+    }
+    .outer th, .outer td {
+        text-align:left;
+    }
+    .outer th {
+        background:#FFF;
+        color:#000;
+    }
+</style>
+<%= javascript_include_tag :application %>
+<script>
+
+    function fieldsCheck()
+    {
+        sel1=document.getElementsByName("s2")[0];
+        if (sel1.options.length==0)
+        {
+            alert("Выберите хотя бы одно поле");
+            tab1=document.getElementById("tab1");
+            tab1.setAttribute("class", "active");
+            document.location.replace("#tab1");
+        }
+    }
+
+    function Result()
+    {
+        sel1=document.getElementsByName("s2")[0];
+        countBox=document.getElementById("count");
+        countBox.value=sel1.options.length;
+        namesBox=document.getElementById("names");
+        str="";
+        for (var i=0;i<sel1.options.length;i++){
+            str+=sel1.options[i].text + "/t";
+        }
+        namesBox.value=str;
+        sqlBox=document.getElementById("sql");
+        sqlBox.value=MakeRequest();
+    }
+
+    function MakeRequest()
+    {
+        var sel1 = document.getElementsByName("s2")[0];
+        var opts=sel1.options;
+        var request="SELECT";
+        j=0;
+        var tblArr = new Array();
+        for(var i=0;i<opts.length;i++) {
+            if(i==0)
+                request+=" "+opts[i].getAttribute("tag")+"."+opts[i].value;
+            else
+                request+=", "+opts[i].getAttribute("tag")+"."+opts[i].value;
+            if(tblArr.indexOf(opts[i].getAttribute("tag").toLowerCase())==-1) {
+                tblArr[j] = opts[i].getAttribute("tag").toLowerCase();
+                j++;
+            }
+        }
+        request+=" FROM";
+        for(var i=0;i<tblArr.length;i++) {
+            if(i==0)
+                request+=" "+tblArr[i];
+            else
+                request+=", "+tblArr[i];
+        }
+        var reltab=document.getElementById("htable");
+        var rels=reltab.rows;
+        var r="";
+        first=true;
+        var relArr=new Array();
+
+        var condtab=document.getElementById("cond");
+        var conds=condtab.rows;
+        str="";
+        for(var i=0;i<conds.length;i++) {
+            if(conds[i].getAttribute("tag")!=null) {
+                str += " " + conds[i].getAttribute("tag");
+                if(tblArr.indexOf(conds[i].getAttribute("class").toLowerCase())==-1) {
+                    tblArr[tblArr.length] = conds[i].getAttribute("class").toLowerCase();
+                    request += ", "+conds[i].getAttribute("class");
+                }
+            }
+        }
+
+        for(var i=0;i<rels.length;i++) {
+            table1=rels[i].getElementsByTagName("TD")[0].innerHTML;
+            table2=rels[i].getElementsByTagName("TD")[1].innerHTML;
+            relations=rels[i].getElementsByTagName("TD")[2].innerHTML;
+            via=rels[i].getElementsByTagName("TD")[3].innerHTML;
+            if(tblArr.indexOf(table1.toLowerCase())!=-1 && tblArr.indexOf(table2.toLowerCase())!=-1)
+            {
+                if(relations.trim()!="")
+                {
+                    if(relArr.indexOf(relations.toLowerCase())==-1) {
+                        if (first == true) {
+                            relArr[relArr.length] = relations.toLowerCase();
+                            r += relations;
+                            first = false;
+                        }
+                        else {
+                            r += " AND " + relations;
+                        }
+                    }
+                }
+                else
+                {
+                    if(tblArr.indexOf(via.toLowerCase())==-1) {
+                        tblArr[tblArr.length] = via;
+                        request+=", "+via;
+                        i=0;
+                    }
+                }
+            }
+        }
+
+        if(r!="") {
+            request += " WHERE " + r;
+        }
+        if(str.split(" ")[str.split(" ").length-1].toUpperCase()=="AND" || str.split(" ")[str.split(" ").length-1].toUpperCase()=="OR")
+        {
+            req=str.split(" ");
+            req.pop();
+            str=req.join(" ");
+        }
+        if(str.trim()!="")
+        {
+            if(r=="")
+            {
+                request += " WHERE (" + str+")";
+            }
+            else
+            {
+                request += " AND (" + str + ")";
+            }
+        }
+
+        var sel2 = document.getElementsByName("so2")[0];
+        var opts2=sel2.options;
+        if(opts2.length>0)
+        {
+            request+=" ORDER BY";
+        }
+        for(var i=0;i<opts2.length;i++) {
+            if(i==0)
+                request+=" "+opts2[i].getAttribute("tag")+"."+opts2[i].value+" "+opts2[i].getAttribute("name");
+            else
+                request+=", "+opts2[i].getAttribute("tag")+"."+opts2[i].value+" "+opts2[i].getAttribute("name");
+        }
+
+        //var res=document.getElementById("result");
+        //res.innerHTML=request;
+
+        return request;
+    }
+
+    function addRow() {
+        var tbody = document.getElementById("cond");
+        var row = document.createElement("TR");
+        var it = document.getElementById("iter");
+        iter = it.getAttribute("name");
+        iter = parseInt(iter) + 1;
+        document.getElementById("iter").setAttribute("name", iter);
+        row.setAttribute("onclick", "toDelete(" + iter + ")");
+        row.setAttribute("id", "tr" + iter);
+        row.setAttribute("name", "nots");
+        var name = document.getElementById("name").options[document.getElementById("name").selectedIndex].text;
+        var group = document.getElementById("name").options[document.getElementById("name").selectedIndex].getAttribute("tag");
+        var type = document.getElementById("name").options[document.getElementById("name").selectedIndex].getAttribute("name");
+        var val = document.getElementById("name").options[document.getElementById("name").selectedIndex].value;
+        var td1 = document.createElement("TD");
+        td1.appendChild(document.createTextNode(name));
+        var td2 = document.createElement("TD");
+        var criterion = document.getElementById("criterion").options[document.getElementById("criterion").selectedIndex].value;
+        td2.appendChild(document.createTextNode(criterion));
+        var td3 = document.createElement("TD");
+        var value = document.getElementById("value").value;
+        td3.appendChild(document.createTextNode(value));
+        var td4 = document.createElement("TD");
+        var relat = document.getElementById("relat").options[document.getElementById("relat").selectedIndex].text;
+        td4.appendChild(document.createTextNode(relat));
+        var td5 = document.createElement("TD");
+        var b=document.createElement("BUTTON");
+        b.setAttribute("onClick", "deleteRow("+iter+")");
+        b.appendChild(document.createTextNode("Удалить"));
+        td5.appendChild(b);
+        if (criterion == "include" || criterion == "notinclude") {
+            if(criterion == "include")
+                row.setAttribute("tag", group + "." + val + " LIKE \"%" + value + "%\"" + " " + relat);
+            else
+                row.setAttribute("tag", group + "." + val + " NOT LIKE \"%" + value + "%\"" + " " + relat);
+        }
+        else {
+            if (type == "D") {
+                row.setAttribute("tag", group + "." + val + criterion + "{" + value + "}" + " " + relat);
+            }
+            else {
+                row.setAttribute("tag", group + "." + val + criterion + "\"" + value + "\"" + " " + relat);
+            }
+        }
+        row.setAttribute("class", group);
+        row.appendChild(td1);
+        row.appendChild(td2);
+        row.appendChild(td3);
+        row.appendChild(td4);
+        row.appendChild(td5);
+        var condtab=document.getElementById("cond");
+        var conds=condtab.rows;
+        if(conds[conds.length-1].getAttribute("tag")==null ||
+                conds[conds.length-1].getAttribute("tag").split(" ")[conds[conds.length-1].getAttribute("tag").split(" ").length-1] == "OR" ||
+                conds[conds.length-1].getAttribute("tag").split(" ")[conds[conds.length-1].getAttribute("tag").split(" ").length-1] == "AND") {
+            if (value == "") {
+                alert("Заполните значение")
+            }
+            else {
+                tbody.appendChild(row);
+            }
+        }
+        else
+        {
+            alert("Нет связки");
+        }
+    }
+
+    function toDelete(idA) {
+        var tr = document.getElementById("tr"+idA);
+        var rs=document.getElementById("cond").rows;
+        for(var i=0;i<rs.length;i++) {
+            rs[i].setAttribute("name", 'nots');
+            rs[i].style.background = '#FFFFFF';
+        }
+        if (tr.getAttribute("name")=='nots')
+        {
+            tr.setAttribute("name", 's');
+            tr.style.background='#DCDCDC';
+        }
+        else {
+            tr.setAttribute("name", 'nots');
+            tr.style.background = '#FFFFFF';
+        }
+    }
+
+    function deleteRow(id)
+    {
+        var table=document.getElementById("cond");
+        var row = document.getElementById("tr"+id);
+        table.deleteRow(row.rowIndex);
+    }
+
+    function copyFields(s1, s2, s3, optnewname)
+    {
+        sel1=document.getElementsByName(s1)[0];
+        sel2=document.getElementsByName(s2)[0];
+        sel3=document.getElementsByName(s3)[0];
+        while (sel2.options.length > 0) {
+            sel2.options[0] = null;
+        }
+        while (sel3.options.length > 0) {
+            sel3.options[0] = null;
+        }
+        var tmpAry = new Array();
+        for (var i=0;i<sel1.options.length;i++) {
+            tmpAry[i] = new Array();
+            tmpAry[i][0] = sel1.options[i].getAttribute("tag");
+            tmpAry[i][1] = sel1.options[i].value;
+            tmpAry[i][2] = sel1.options[i].text;
+            tmpAry[i][3] = sel1.options[i].getAttribute("class");
+            tmpAry[i][4] = sel1.options[i].getAttribute("name");
+        }
+        j=0;
+        for (var i=0;i<tmpAry.length;i++) {
+                var op = new Option(tmpAry[i][2], tmpAry[i][1]);
+                op.setAttribute("name", optnewname);
+                op.setAttribute("tag", tmpAry[i][0]);
+                op.setAttribute("class",tmpAry[i][3]);
+                sel2.options[j] = op;
+                j++;
+        }
+    }
+
+    function sortSelect(s1) {
+        selElem=document.getElementsByName(s1)[0];
+        var tmpAry = new Array();
+        for (var i=0;i<selElem.options.length;i++) {
+            tmpAry[i] = new Array();
+            tmpAry[i][0] = selElem.options[i].getAttribute("tag");
+            tmpAry[i][1] = selElem.options[i].getAttribute("name");
+            tmpAry[i][3] = selElem.options[i].value;
+            tmpAry[i][2] = selElem.options[i].text;
+            tmpAry[i][4] = selElem.options[i].disabled;
+            tmpAry[i][5] = selElem.options[i].getAttribute("class");
+        }
+        tmpAry.sort();
+        while (selElem.options.length > 0) {
+            selElem.options[0] = null;
+        }
+        for (var i=0;i<tmpAry.length;i++) {
+            var op = new Option(tmpAry[i][2], tmpAry[i][3]);
+            op.setAttribute("name", tmpAry[i][1]);
+            op.setAttribute("tag", tmpAry[i][0]);
+            op.disabled=tmpAry[i][4];
+            op.setAttribute("class",tmpAry[i][5]);
+            selElem.options[i] = op;
+        }
+        selElem.selectedIndex=0;
+        selElem.selectedIndex=-1;
+        return;
+    }
+
+    function ChangeCriterion(s1, s2)
+    {
+        var sel1 = document.getElementsByName(s1)[0];
+        var selElem = document.getElementsByName(s2)[0];
+        var opt=sel1.options[sel1.selectedIndex];
+        while (selElem.options.length > 0) {
+            selElem.options[0] = null;
+        }
+        if(opt.getAttribute("name") == "N" || opt.getAttribute("name") == "R" || opt.getAttribute("name") == "C"
+                || opt.getAttribute("name") == "D" || opt.getAttribute("name") == "B")
+        {
+            var op = new Option("<=", "<=");
+            selElem.options.add(op);
+            op = new Option(">=", ">=");
+            selElem.options.add(op);
+            op = new Option("=", "=");
+            selElem.options.add(op);
+            op = new Option("!=", "!=");
+            selElem.options.add(op);
+            op = new Option(">", ">");
+            selElem.options.add(op);
+            op = new Option("<", "<");
+            selElem.options.add(op);
+        }
+        if(opt.getAttribute("name") == "S")
+        {
+            var op = new Option("=", "=");
+            selElem.options.add(op);
+            op = new Option("!=", "!=");
+            selElem.options.add(op);
+            op = new Option("включает", "include");
+            selElem.options.add(op);
+            op = new Option("не включает", "notinclude");
+            selElem.options.add(op);
+        }
+    }
+
+    function Move(s1, s2)
+    {
+        var sel2 = document.getElementsByName(s2)[0];
+        var sel1 = document.getElementsByName(s1)[0];
+        var opt=sel1.options[sel1.selectedIndex];
+        sel2.appendChild(opt);
+        sortSelect("s1");
+    }
+
+    function MoveAll(opt, s2)
+    {
+        var frag = document.createDocumentFragment();
+        var opts = document.getElementsByName(opt);
+        var sel2 = document.getElementsByName(s2)[0];
+        while(opts.length>0) {
+            frag.appendChild(opts[0]);
+        }
+        sel2.appendChild(frag);
+        sortSelect("s1");
+    }
+    function Order(s1)
+    {
+        var sel1 = document.getElementsByName(s1)[0];
+        var opt=sel1.options[sel1.selectedIndex];
+        if(opt.getAttribute("name")=="asc")
+        {
+            var but = document.getElementsByName("butasc")[0];
+            but.click();
+        }
+        else
+        {
+            var but = document.getElementsByName("butdesc")[0];
+            but.click();
+        }
+    }
+    function AscClick(s1)
+    {
+        var sel1 = document.getElementsByName(s1)[0];
+        var opt=sel1.options[sel1.selectedIndex];
+        if(opt.getAttribute("name")=="desc")
+        {
+            opt.setAttribute("name", "asc")
+        }
+    }
+    function DescClick(s1)
+    {
+        var sel1 = document.getElementsByName(s1)[0];
+        var opt=sel1.options[sel1.selectedIndex];
+        if(opt.getAttribute("name")=="asc")
+        {
+            opt.setAttribute("name", "desc")
+        }
+    }
+</script>
+
+<script type="text/javascript" language="javascript">
+
+    $(document).ready(function() {
+
+        // блок, содержащий форму
+        // в index.html.erb:
+        // content_tag(:div, :class => :class => :form_block)
+        var form_block = $('div.sql_div');
+
+        // ловим отправку формы
+        // в _form.html.erb:
+        // form_tag(form_send_path, :id => :form_id)
+        form_block.on('submit', 'form#form_id', function(e) {
+
+            e.preventDefault();
+
+            // собственно сам ajax-запрос
+            // все данные берем из формы - url, данные
+            $.ajax($(this).attr('action'), {
+
+                async: false,
+                cache: false,
+                data: $(this).serialize(),
+                dataType: 'html',
+                type: 'POST',
+
+                success: function (data, textStatus, jqXHR) {
+                    // результат записываем в блок формы
+                    form_block.html(data);
+                },
+
+                error: function () {
+                    alert('Ошибка запроса');
+                }
+            });
+
+            return false;
+
+        });
+
+    });
+
+</script>
+
+
+<!--<button class="btn btntop" onclick="MakeRequest()">
+  Просмотреть запрос
+</button>
+<label id="result">Результат запроса</label>-->
+<div class="tabbable"> <!-- Only required for left/right tabs -->
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#tab1" data-toggle="tab">Поля</a></li>
+    <li><a href="#tab2" data-toggle="tab">Условия</a></li>
+    <li><a href="#tab3" data-toggle="tab" onclick="copyFields('s2', 'so1', 'so2', 'asc')">Порядок</a></li>
+    <li><a href="#tab4" data-toggle="tab" onclick="Result()">Результат</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab1">
+
+      <div class="main">
+        <div class="hordiv">
+          <select size="10" name="s1" class="selector">
+            <% @old="" %>
+            <% @fields.each do |field| %>
+                <%= render partial: 'field', locals: {field: field, opt: "opt1"} %>
+            <% end %>
+          </select>
+        </div>
+        <div class="vertical">
+          <button class="btn btnfixed" onclick="Move('s1', 's2')">
+            >
+          </button>
+          <button class="btn btnfixed" onclick="Move('s2', 's1')">
+            <
+          </button>
+          <button class="btn btnfixed" onclick="MoveAll('opt1', 's2')">
+            >>
+          </button>
+          <button class="btn btnfixed" onclick="MoveAll('opt1', 's1')">
+            <<
+          </button>
+        </div>
+        <div class="hordiv">
+          <select size="10" name="s2" class="selector">
+
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tab-pane" id="tab2">
+
+      <div class="row">
+        <div class="span6 offset3">
+          <label for="name">Имя</label>
+          <select name="name" id="name" onchange="ChangeCriterion('name', 'criterion')">
+            <% @fields.each do |field| %>
+                <option value=<%= "#{field.field_name}" %> tag=<%= "#{field.table_name}" %> name=<%= "#{field.field_type}" %> >
+                  <%= field.transl_fn %>
+                </option>
+            <% end %>
+          </select>
+
+          <label for="criterion">Критерий</label>
+          <select name="criterion" id="criterion">
+            <option> >= </option>
+            <option> > </option>
+            <option> < </option>
+            <option> <= </option>
+            <option> = </option>
+            <option> != </option>
+          </select>
+
+          <label for="value">Значение</label>
+          <input type="text" name="value" id="value">
+
+          </input>
+
+          <label for="relat">Связка</label>
+          <select name="relat" id="relat">
+            <option>  </option>
+            <option> AND </option>
+            <option> OR </option>
+          </select>
+
+          <input onclick="addRow()" type="submit" name="commit" value="Сохранить" class="btn btn-large btn-primary" />
+        </div>
+      </div>
+
+      <div class="row span6 offset3">
+        <div class="outer">
+          <div class="innera">
+            <table class="table table-hover table-condensed">
+              <tbody id="cond">
+              <tr>
+                <th>Имя</th>
+                <th>Критерий</th>
+                <th>Значение</th>
+                <th>Связка</th>
+                <th></th>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tab-pane" id="tab3">
+
+      <div>
+        <div class="hordiv">
+          <label>Выбранные поля</label>
+          <select size="10" name="so1" class="selector">
+            <% @old="" %>
+            <% @fields.each do |field| %>
+                <%= render partial: 'field', locals: {field: field, opt: "ascending"} %>
+            <% end %>
+          </select>
+        </div>
+        <div class="vertical">
+          <button class="btn btnfixed" onclick="Move('so1', 'so2')">
+            >
+          </button>
+          <button class="btn btnfixed" onclick="Move('so2', 'so1')">
+            <
+          </button>
+          <button class="btn btnfixed" onclick="MoveAll('asc', 'so2'); MoveAll('desc', 'so2')">
+            >>
+          </button>
+          <button class="btn btnfixed" onclick="MoveAll('asc', 'so1'); MoveAll('desc', 'so1')">
+            <<
+          </button>
+        </div>
+        <div class="hordiv">
+          <label>Последовательность сортировки</label>
+          <div class="btn-group" data-toggle="buttons-radio">
+            <button type="button" class="btn btn-primary active" name="butasc" onclick="AscClick('so2')">По возрастанию</button>
+            <button type="button" class="btn btn-primary" name="butdesc" onclick="DescClick('so2')">По убыванию</button>
+          </div>
+          <select size="10" name="so2" class="selector" onchange="Order('so2')">
+
+          </select>
+        </div>
+
+
+      </div>
+
+    </div>
+
+    <div class="tab-pane" id="tab4">
+        <%=
+            content_tag(:div, :class => :sql_div) do
+                render 'result'
+            end
+        %>
+    </div>
+  </div>
+</div>
+
+<label id="iter" class="hiddentag" name="0">0</label>
+<table hidden="true">
+  <tbody id="htable">
+  <% @relations.each do |rel| %>
+      <tr>
+        <td><%= rel.table1 %></td>
+        <td><%= rel.table2 %></td>
+        <td><%= rel.relations %></td>
+        <td><%= rel.via %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+

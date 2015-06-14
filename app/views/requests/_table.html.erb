@@ -1,0 +1,16 @@
+<table class="table table-hover table-condensed">
+<tr>
+<% @names.split('/t').each do |name| %>
+    <th><%= name %></th>
+<% end %>
+</tr>
+<% @sqlres.each do |s| %>
+    <tr>
+      <% $i=0 %>
+      <% while $i<Integer(@count)  do %>
+          <td><%= s[$i] %></td>
+          <% $i+=1 %>
+      <% end %>
+    </tr>
+<% end %>
+</table>

@@ -37,7 +37,9 @@
 <div class="admhead">
   <h1>Преподаватели</h1>
 </div>
+<% if current_user.admin? %>
 <%= link_to "Добавить", new_teacher_path, class: "btn btn-default btn-lg", role: "button" %>
+<% end %>
 <table id="myTable" class="table table-hover">
   <thead>
     <tr>

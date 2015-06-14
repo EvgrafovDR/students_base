@@ -1,4 +1,6 @@
 class FacultiesController < ApplicationController
+  before_action :signed_in_user
+  before_action :admin_user,     only: [:edit, :update, :destroy, :create, :new]
   def new
     @faculty = Faculty.new
   end
@@ -12,6 +14,7 @@ class FacultiesController < ApplicationController
   end
 
   def update
+    @faculty = Faculty.find(params[:id])
     if @faculty.update_attributes(faculty_params)
       flash[:success]="Факультет изменен"
       redirect_to faculties_path
@@ -40,5 +43,18 @@ class FacultiesController < ApplicationController
 
   def faculty_params
     params.require(:faculty).permit(:name)
+  end
+
+  #before filters
+
+  def signed_in_user
+    unless signed_in?
+      store_location
+      redirect_to signin_url, notice: "Пожалуйста авторизуйтесь"
+    end
+  end
+
+  def admin_user
+    redirect_to(root_url, notice: "Недостаточно прав") unless current_user.admin?
   end
 end

@@ -6,9 +6,16 @@ Rails.application.routes.draw do
 
   get 'groups/new'
 
+  get 'requests/conditions'
+  get 'requests/order'
+  get 'requests/fields'
+  get 'requests/result'
+  post 'requests/fields' => 'requests#sqlexec', :as => :sqlexec
+
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
   resources :students
+  resources :norms
   resources :teachers
   resources :faculties
   resources :groups

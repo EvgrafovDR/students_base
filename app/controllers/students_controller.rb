@@ -1,4 +1,7 @@
 class StudentsController < ApplicationController
+  before_action :signed_in_user
+  before_action :admin_user,     only: [:edit, :update, :destroy, :create, :new]
+
   def new
     @student = Student.new
   end
@@ -15,6 +18,7 @@ class StudentsController < ApplicationController
   end
 
   def update
+    @student = Student.find(params[:id])
     if @student.update_attributes(student_params)
       flash[:success]="Студент изменен"
       redirect_to students_path
@@ -44,4 +48,17 @@ class StudentsController < ApplicationController
     def student_params
       params.require(:student).permit(:name, :family_name, :second_name, :group_id, :teacher_id, :faculty_id)
     end
+
+  #before filters
+
+  def signed_in_user
+    unless signed_in?
+      store_location
+      redirect_to signin_url, notice: "Пожалуйста авторизуйтесь"
+    end
+  end
+
+  def admin_user
+    redirect_to(root_url, notice: "Недостаточно прав") unless current_user.admin?
+  end
 end

@@ -11,10 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150421040012) do
+ActiveRecord::Schema.define(version: 20150614171709) do
+
+  create_table "dats", force: :cascade do |t|
+    t.date     "dat"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "faculties", force: :cascade do |t|
     t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "fields", force: :cascade do |t|
+    t.string   "field_name"
+    t.string   "table_name"
+    t.string   "field_type"
+    t.string   "transl_fn"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "fines", force: :cascade do |t|
+    t.integer  "norm_id"
+    t.integer  "dat_id"
+    t.float    "fine"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -26,6 +49,43 @@ ActiveRecord::Schema.define(version: 20150421040012) do
     t.string   "health_group"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "norms", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "main"
+    t.integer  "dat_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float    "v1"
+    t.float    "v2"
+    t.float    "v3"
+    t.float    "v4"
+    t.float    "v5"
+    t.float    "v6"
+    t.float    "v7"
+    t.float    "v8"
+    t.float    "v9"
+    t.float    "v10"
+    t.string   "typ"
+  end
+
+  create_table "reltables", force: :cascade do |t|
+    t.string   "table1"
+    t.string   "table2"
+    t.string   "relations"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "via"
+  end
+
+  create_table "results", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "norm_id"
+    t.integer  "dat_id"
+    t.float    "result"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "students", force: :cascade do |t|

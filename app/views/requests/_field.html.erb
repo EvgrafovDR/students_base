@@ -1,0 +1,7 @@
+  <% if field.table_name != @old %>
+      <option disabled class="nav-header1" name="aa" tag=<%= "#{field.table_name}" %>> <%=field.table_name%> </option>
+      <% @old = field.table_name %>
+  <% end %>
+<option value=<%= "#{field.field_name}" %> tag=<%= "#{field.table_name}" %> name=<%="#{opt}"%>>
+  <%= field.transl_fn %>
+</option>

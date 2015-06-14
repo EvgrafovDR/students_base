@@ -1,0 +1,16 @@
+<%=
+    # отображение сообщение об ошибке, если есть
+    if (error_message ||= nil)
+        content_tag(:span, error_message, :class => :error_message)
+    end
+%>
+
+<%=
+    form_tag(requests_fields_path, :id => :form_id) do
+        label_tag(:sql, 'Запрос') +
+        text_field_tag(:sql, @sql) +
+        hidden_field_tag(:count, @count) +
+        hidden_field_tag(:names, @names) +
+        submit_tag('отправить', class: "btn btntop")
+    end
+%>

@@ -1,0 +1,28 @@
+<tr id="tr<%= norm.id %>">
+  <td><%= norm.id %></td>
+  <td><%= norm.name %></td>
+  <% if norm.main %>
+    <td>Да</td>
+  <% else %>
+    <td>Нет</td>
+  <% end %>
+  <td><%= norm.typ %></td>
+  <td><%= norm.dat %></td>
+  <td><%= norm.v1 %></td>
+  <td><%= norm.v2 %></td>
+  <td><%= norm.v3 %></td>
+  <td><%= norm.v4 %></td>
+  <td><%= norm.v5 %></td>
+  <td><%= norm.v6 %></td>
+  <td><%= norm.v7 %></td>
+  <td><%= norm.v8 %></td>
+  <td><%= norm.v9 %></td>
+  <td><%= norm.v10 %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Удалить", norm, method: :delete,
+                    data: { confirm: "Вы уверены?" } %>
+    <% end %></td>
+  <td><% if current_user.admin? %>
+        <%= link_to "Изменить", edit_norm_path(norm) %>
+    <% end %></td>
+</tr>
